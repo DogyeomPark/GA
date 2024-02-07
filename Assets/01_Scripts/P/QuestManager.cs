@@ -47,8 +47,6 @@ public class QuestManager : MonoBehaviour
     Queue<string> naming = new Queue<string>();
     Queue<string> sentence = new Queue<string>();
 
-    public bool isFirst;
-
     [Header("퀘스트 진행버튼")]
     public GameObject clearfowardQuestImg;
     public GameObject acceptBtn;
@@ -60,7 +58,7 @@ public class QuestManager : MonoBehaviour
     [Header("퀘스트 현재 진행도 창")]
     public GameObject questPopUpPanel;
     public Text questDescriptionGoalTxt; //이 텍스트에 questGoalTxt 의 문자가 들어감
-    public string questGoalTxt; 
+    public string questGoalTxt;
     public int questCurCnt;
     public int questMaxCnt;
 
@@ -86,7 +84,7 @@ public class QuestManager : MonoBehaviour
         ingImg.SetActive(false);
 
         questPanel.SetActive(false);
-        questPopUpPanel.SetActive(false);
+        
         questPopUpManager.questIdx = dataMgrDontDestroy.QuestIdx;
         questGoalTxt = dataMgrDontDestroy.GoalTxt;
         questCurCnt = dataMgrDontDestroy.QuestCurCnt;
@@ -124,7 +122,7 @@ public class QuestManager : MonoBehaviour
         var jsonData = JSON.Parse(json); //var의 의미: Unity외의 파일을 다가져온다.
 
         int item = n - 1; //매개변수
-        
+
         questNameTxt.text = (jsonData["Quest"][item]["QuestName"]);
         goalTxt.text = (jsonData["Quest"][item]["Goal"]);
         rewardExp.text = (jsonData["Quest"][item]["RewardExp"]);
@@ -137,32 +135,76 @@ public class QuestManager : MonoBehaviour
     {
         if (n == dataMgrDontDestroy.QuestIdx)
         {
-            if (questPopUpManager.isCompleted != true)
+            if (dataMgrDontDestroy.IsDoing == true)
             {
-                acceptBtn.SetActive(false);
-                clearfowardQuestImg.SetActive(false);
-                ingImg.SetActive(true);
-                completedBtn.SetActive(false);
-                endBtn.SetActive(false);
+                if (dataMgrDontDestroy.IsCompleted == true)
+                {
+                    acceptBtn.SetActive(false);
+                    clearfowardQuestImg.SetActive(false);
+                    ingImg.SetActive(false);
+                    completedBtn.SetActive(true);
+                    endBtn.SetActive(false);
+                }
+                else
+                {
+                    acceptBtn.SetActive(false);
+                    clearfowardQuestImg.SetActive(false);
+                    ingImg.SetActive(true);
+                    completedBtn.SetActive(false);
+                    endBtn.SetActive(false);
+                }
             }
             else
             {
-                acceptBtn.SetActive(false);
-                clearfowardQuestImg.SetActive(false);
-                ingImg.SetActive(false);
-                completedBtn.SetActive(true);
-                endBtn.SetActive(false);
+                if (dataMgrDontDestroy.IsCompleted == true)
+                {
+                    acceptBtn.SetActive(false);
+                    clearfowardQuestImg.SetActive(false);
+                    ingImg.SetActive(false);
+                    completedBtn.SetActive(true);
+                    endBtn.SetActive(false);
+                }
+                else
+                {
+                    acceptBtn.SetActive(false);
+                    clearfowardQuestImg.SetActive(false);
+                    ingImg.SetActive(false);
+                    completedBtn.SetActive(false);
+                    endBtn.SetActive(true);
+                }
             }
         }
         else if (n > dataMgrDontDestroy.QuestIdx)
         {
-            if (n == 1 && dataMgrDontDestroy.QuestIdx == 0)
+            if (n - dataMgrDontDestroy.QuestIdx == 1)
             {
-                acceptBtn.SetActive(true);
-                clearfowardQuestImg.SetActive(false);
-                ingImg.SetActive(false);
-                completedBtn.SetActive(false);
-                endBtn.SetActive(false);
+                if(n==1 && dataMgrDontDestroy.QuestIdx == 0)
+                {
+                    acceptBtn.SetActive(true);
+                    clearfowardQuestImg.SetActive(false);
+                    ingImg.SetActive(false);
+                    completedBtn.SetActive(false);
+                    endBtn.SetActive(false);
+                }
+                else
+                {
+                    if (dataMgrDontDestroy.IsDoing == false)
+                    {
+                        acceptBtn.SetActive(true);
+                        clearfowardQuestImg.SetActive(false);
+                        ingImg.SetActive(false);
+                        completedBtn.SetActive(false);
+                        endBtn.SetActive(false);
+                    }
+                    else
+                    {
+                        acceptBtn.SetActive(false);
+                        clearfowardQuestImg.SetActive(true);
+                        ingImg.SetActive(false);
+                        completedBtn.SetActive(false);
+                        endBtn.SetActive(false);
+                    }
+                }
             }
             else
             {
@@ -185,10 +227,12 @@ public class QuestManager : MonoBehaviour
     public void AcceptBtn()
     {
         dataMgrDontDestroy.QuestIdx++;
+        dataMgrDontDestroy.QuestCurCnt = 0;
+        dataMgrDontDestroy.IsDoing = true; // 나중에 싱글톤으로 보내야
 
         string json = txtFile.text;
         var jsonData = JSON.Parse(json);
-        int item = dataMgrDontDestroy.QuestIdx - 1;        
+        int item = dataMgrDontDestroy.QuestIdx - 1;
 
         if (jsonData["Quest"][item]["Goal"] != null)
         {
@@ -204,15 +248,16 @@ public class QuestManager : MonoBehaviour
         questPopUpManager.UpdateQuestStatus();
 
         acceptBtn.SetActive(false);
-        questPopUpPanel.SetActive(true);
         ingImg.SetActive(true);
     }
 
     public void CompletedBtn()
     {
         QuestClearReward(dataMgrDontDestroy.QuestIdx);
+        dataMgrDontDestroy.IsCompleted = false;
+        dataMgrDontDestroy.IsDoing = false;
         questPopUpPanel.SetActive(false);
-        endBtn.SetActive(true);   
+        endBtn.SetActive(true);
     }
 
     public void QuestClearReward(int n)

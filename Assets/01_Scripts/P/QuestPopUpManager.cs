@@ -5,45 +5,47 @@ using UnityEngine.UI;
 
 public class QuestPopUpManager : MonoBehaviour
 {
-    public DataMgrDontDestroy dataMgr;
+    public DataMgrDontDestroy dataMgrDonDestroy;
     public Text questCountTxt;
     public Text goalTxt;
+    public GameObject questPopUpPanel;
 
     public string goalInfo;
     public int questIdx;
     public int curCnt;
     public int maxCnt;
 
-    public bool isCompleted;
-
     public void UpdateQuestStatus()
     {
-        goalInfo = dataMgr.GoalTxt;
-        questIdx = dataMgr.QuestIdx;
-        curCnt = dataMgr.QuestCurCnt;
-        maxCnt = dataMgr.QuestMaxCnt;
+        questPopUpPanel.SetActive(true);
+        goalInfo = dataMgrDonDestroy.GoalTxt;
+        questIdx = dataMgrDonDestroy.QuestIdx;
+        curCnt = dataMgrDonDestroy.QuestCurCnt;
+        maxCnt = dataMgrDonDestroy.QuestMaxCnt;
 
-        goalTxt.text = goalInfo;
-        questCountTxt.text = $"({curCnt} / {maxCnt})";
-
-        if (curCnt >= maxCnt)
+        if (dataMgrDonDestroy.IsDoing == true && dataMgrDonDestroy.IsCompleted == false)
         {
+            goalTxt.text = goalInfo;
+            questCountTxt.text = $"({curCnt} / {maxCnt})";
+            questCountTxt.color = Color.white;
+        }
+        else if (dataMgrDonDestroy.IsDoing == true && dataMgrDonDestroy.IsCompleted == true)
+        {
+            goalTxt.text = goalInfo;
+            questCountTxt.text = $"({curCnt} / {maxCnt})";
             questCountTxt.color = Color.yellow;
-            isCompleted = true;
         }
         else
         {
-            questCountTxt.color = Color.white;
+            questPopUpPanel.SetActive(false);
         }
     }
     private void Start()
     {
-        dataMgr = DataMgrDontDestroy.Instance;
-
-        questCountTxt = GameObject.Find("QCountTxt").GetComponent<Text>();
-        goalInfo = dataMgr.GoalTxt;
-        questIdx = dataMgr.QuestIdx;
-        curCnt = dataMgr.QuestCurCnt;
-        maxCnt = dataMgr.QuestMaxCnt;
+        dataMgrDonDestroy = DataMgrDontDestroy.Instance;
+        goalInfo = dataMgrDonDestroy.GoalTxt;
+        questIdx = dataMgrDonDestroy.QuestIdx;
+        curCnt = dataMgrDonDestroy.QuestCurCnt;
+        maxCnt = dataMgrDonDestroy.QuestMaxCnt;
     }
 }
