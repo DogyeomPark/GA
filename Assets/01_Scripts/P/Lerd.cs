@@ -14,6 +14,9 @@ public class Lerd : MonoBehaviour
         {
             if (other.GetComponent<PhotonView>().IsMine)
             {
+
+                dataMgrDontDestroy.QuestCurCnt++;
+
                 if(dataMgrDontDestroy.QuestCurCnt < dataMgrDontDestroy.QuestMaxCnt)
                 {
                     dataMgrDontDestroy.QuestCurCnt++;
@@ -26,8 +29,9 @@ public class Lerd : MonoBehaviour
                 {
                     return;
                 }
+
                 questPopUpManager.UpdateQuestStatus();
-                Debug.Log("·¯µå");
+                Debug.Log("Â·Â¯ÂµÃ¥");
             }
         }
     }
