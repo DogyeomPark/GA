@@ -18,7 +18,10 @@ namespace Photon.Realtime
 {
     using System;
     using System.Diagnostics;
+<<<<<<< HEAD
     using System.Text;
+=======
+>>>>>>> upstream/DEV
     using SupportClass = ExitGames.Client.Photon.SupportClass;
 
     #if SUPPORTED_UNITY
@@ -100,6 +103,35 @@ namespace Photon.Realtime
         #endif
 
 
+<<<<<<< HEAD
+=======
+        /// <summary></summary>
+        protected virtual void Awake()
+        {
+            if (this.ApplyDontDestroyOnLoad)
+            {
+                DontDestroyOnLoad(this.gameObject);
+            }
+        }
+
+        /// <summary>Called by Unity when the application gets closed. Disconnects if OnApplicationQuit() was called before.</summary>
+        protected virtual void OnDisable()
+        {
+            this.StopFallbackSendAckThread();
+
+            if (AppQuits)
+            {
+                if (this.Client != null && this.Client.IsConnected)
+                {
+                    this.Client.Disconnect(DisconnectCause.ApplicationQuit);
+                    this.Client.LoadBalancingPeer.StopThread();
+                }
+
+                SupportClass.StopAllBackgroundCalls();
+            }
+        }
+
+>>>>>>> upstream/DEV
 
         /// <summary>Called by Unity when the application gets closed. The UnityEngine will also call OnDisable, which disconnects.</summary>
         public void OnApplicationQuit()
@@ -149,6 +181,7 @@ namespace Photon.Realtime
         }
 
 
+<<<<<<< HEAD
 
         /// <summary></summary>
         protected virtual void Awake()
@@ -176,6 +209,8 @@ namespace Photon.Realtime
             }
         }
 
+=======
+>>>>>>> upstream/DEV
         #endif
 
 
@@ -265,6 +300,7 @@ namespace Photon.Realtime
             return true;
         }
     }
+<<<<<<< HEAD
 
 
     /// <summary>
@@ -480,4 +516,6 @@ namespace Photon.Realtime
             value |= bitvals << bitpos;
         }
     }
+=======
+>>>>>>> upstream/DEV
 }
