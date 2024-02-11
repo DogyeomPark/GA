@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 0118ff4a-542f-4492-90a4-26bce1c44a77
+    AppIdRealtime: 3c218b82-d1e9-461b-9730-78d32aafac8d
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
@@ -84,7 +84,27 @@ MonoBehaviour:
   - PatternTimeCheck
   - NEM1
   - Spawn
+<<<<<<< HEAD:Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
 >>>>>>> upstream/DEV
+=======
+  - FixedUpdate
+  - KnowAnim
+  - DieAllClient
+  - OnBreakAllClient
+  - AllClientBreakTime
+  - breakTiming
+  - DieNowAllClient
+  - GroundCrushAllClient
+  - GroundOner
+  - HealthUPAllClient
+  - NemAllClient
+  - DownAllClient
+  - Nem2
+  - SaveBallPosition
+  - Spawns
+  - Nem2Start
+  - NemStart
+>>>>>>> upstream/main:Assets/03_MyAssets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
